@@ -29,17 +29,9 @@ class TicTacToeBoard:
 			raise ValueError('tile ' + str(pos) + ' is already occupied')
 			
 	def check_wins(self):
-		lines = []
-		for row in range(3):
-			lines.append(self.board[row, :])
-		for col in range(3):
-			lines.append(self.board[:, col])
-		lines.append(self.board.diagonal())
-		lines.append(np.fliplr(self.board).diagonal())
-		complete_lines = []
-		for line in lines:
-			if (line[0] != 0) and (line == line[0]).all():
-				complete_lines.append(line[0])
+		lines = np.vstack((self.board, self.board.transpose(), self.board.diagonal(), np.fliplr(self.board).diagonal()))
+		complete_mask = np.logical_and(lines[:, 0] != 0, np.all(lines.transpose() == lines[:, 0], axis = 0))
+		complete_lines = lines[:, 0][complete_mask]
 		if len(complete_lines) == 0:
 			if(0 in self.board):
 				return 0
