@@ -37,7 +37,7 @@ class TicTacToeBoard:
                 return 0
             else:
                 return -1
-        elif len(complete_lines) == 1:
+        elif np.all(complete_lines == complete_lines[0]):
             return complete_lines[0]
         else:
-            raise RuntimeError("invalid game state ")
+            raise RuntimeError("invalid game state")
