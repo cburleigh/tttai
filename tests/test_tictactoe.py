@@ -14,7 +14,7 @@ class linecountTestCase(unittest.TestCase):
         gamemoves = [(0,0), (1,0), (0,1), (1,1), (0,2)]
         for move in gamemoves:
             board.move(move)
-        self.assertEqual(board.check_wins(), firstplayer)
+        self.assertEqual(board.get_winner(), firstplayer)
         
     def test_repeat_move(self):
         board = tictactoe.TicTacToeBoard()
@@ -36,11 +36,11 @@ class linecountTestCase(unittest.TestCase):
     
     def test_draw(self):
         board = tictactoe.TicTacToeBoard()
-        drawcode = -1
+        drawcode = 0
         gamemoves = [(1,1), (2,1), (2,0), (0,2), (2,2), (0,0), (0,1), (1,0), (1,2)]
         for move in gamemoves:
             board.move(move)
-        self.assertEqual(board.check_wins(), drawcode)
+        self.assertEqual(board.get_winner(), drawcode)
         
     def test_twoline_win(self):
         board = tictactoe.TicTacToeBoard()
@@ -48,7 +48,27 @@ class linecountTestCase(unittest.TestCase):
         gamemoves = [(0,0), (1,0), (1,1), (2,0), (0,2), (2,1), (1,2), (0,1), (2,2)]
         for move in gamemoves:
             board.move(move)
-        self.assertEqual(board.check_wins(), firstplayer)
+        self.assertEqual(board.get_winner(), firstplayer)
+        
+    def test_game_in_progress(self):
+        board = tictactoe.TicTacToeBoard()
+        unresolved_code = -1
+        firstplayer = board.current_player()
+        gamemoves = [(0,0), (1,0), (1,1), (2,0)]
+        for move in gamemoves:
+            board.move(move)
+        self.assertEqual(board.get_winner(), unresolved_code)
+        
+    def test_history(self):
+        board = tictactoe.TicTacToeBoard()
+        gamemoves1 = [(1,1), (2,1), (2,0), (0,2)]
+        gamemoves2 = [(2,2), (0,0), (0,1), (1,0), (1,2)]
+        for move in gamemoves1:
+            board.move(move)
+        self.assertEqual(board.get_history(), gamemoves1)
+        for move in gamemoves2:
+            board.move(move)
+        self.assertEqual(board.get_history(), gamemoves1+gamemoves2)
         
 if __name__ == '__main__':
     unittest.main()
