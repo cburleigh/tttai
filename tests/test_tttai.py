@@ -24,7 +24,7 @@ class TestAIMethods(unittest.TestCase):
         for move in gamemoves:
             game.move(move)
         board = game.get_board()
-        ai_boards = ai.find_result_boards(board)
+        ai_boards = ai.find_result_boards(board, 1)
         game.move(last_space)
         board = game.get_board()
         self.assertTrue(np.array_equal(ai_boards[0], board))
@@ -36,8 +36,16 @@ class TestAIMethods(unittest.TestCase):
         available_spaces = [[0,1], [0,2], [1,0], [1,2], [2,0], [2,1]]
         formatted_spaces = (range(len(available_spaces)), [x[0] for x in available_spaces], [x[1] for x in available_spaces])
         boards[formatted_spaces] = 2
-        self.assertTrue(np.array_equal(ai.find_result_boards(board), boards))
-        
+        self.assertTrue(np.array_equal(ai.find_result_boards(board, 2), boards))
+    
+    def test_index_conversion(self):
+        board = np.zeros((3,3))
+        ai = tttai.TabularMoves(1)
+        boards = ai.find_result_boards(board, 1)
+        indices = ai.convert_indices(boards)
+        expected_indices = [3**i for i in range(9)]
+        self.assertTrue(np.array_equal(indices, expected_indices))
+    
 if __name__ == '__main__':
     unittest.main()
 
