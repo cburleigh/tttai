@@ -32,16 +32,21 @@ class TabularMoves:
         if self.player == 2:
             board = flip_board(board)
         return np.sum(board * TRI_DIGITS)
+    
+    def find_valid_moves(self,board):
+        return board == 0
         
-    def find_valid_moves(self, board):
-        valid_moves = board == 0
-        num_moves = np.sum(board)
-        result_boards = np.tile(board, (num_moves, 1, 1))
-        move_indices = (np.arange(num_moves), np.where(valid_moves))
-        result_boards[move_indices] = player
+    def find_result_boards(self, board):
+        valid_moves = self.find_valid_moves(board)
+        num_moves = np.sum(valid_moves)
+        result_boards = np.tile(board, (int(num_moves), 1, 1))
+        moves = np.where(valid_moves)
+        move_indices = (np.arange(num_moves), moves[0], moves[1])
+        result_boards[move_indices] = self.player
         return result_boards
         
     def move(self, board):
         pass
         
-        
+def flip_board(board):
+        return (board%2)+np.minimum(board, 1)

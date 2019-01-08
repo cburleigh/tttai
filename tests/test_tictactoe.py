@@ -2,7 +2,7 @@ import numpy as np
 import tictactoe
 import unittest
 
-class linecountTestCase(unittest.TestCase):     
+class TestTicTacToeBoard(unittest.TestCase):     
 
     def test_board_starts_empty(self):
         board = tictactoe.TicTacToeBoard()
